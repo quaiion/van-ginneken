@@ -81,7 +81,7 @@ def FindChildren(nodeId : int, tree : Tree, parseResult):
         FindChildren(item.id, tree, parseResult)
 
 # Пример использования
-if __name__ == "__main__":
+def ParseInputData():
     cfg.ParseConfig('tech1.json')
     result = ParseNetworkFile('test01.json')
     print(result['edges'])
@@ -111,10 +111,5 @@ if __name__ == "__main__":
             tree.InsertNodeWithNoId(nodeWire, savedId, vertices[1])
             savedId = nodeWire.id
             
-
-            
-
     tree.VisualizeTree()
-    
-
-    
+    return tree
