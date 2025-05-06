@@ -111,5 +111,5 @@ def ParseInputData(techFilePath : str, netFilePath : str):
             tree.InsertNodeWithNoId(nodeWire, savedId, vertices[1])
             savedId = nodeWire.id
             
-    tree.VisualizeTree()
+    # tree.VisualizeTree()
     return tree
