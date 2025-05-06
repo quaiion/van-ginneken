@@ -62,7 +62,7 @@ class NodeDriver(Node):
         super().__init__(id, x, y, name, NodeType.Driver)
         super().capacitance = cfg.GetDriverCapacitance(name)
         super().resistance  = cfg.GetDriverResistance(name)
-        super().rat         = cfg.GetDriverRat(name)
+        super().rat         = cfg.GetDriverDelay(name)
 
 class NodeSteiner(Node):
     def __init__(self, id : int, x : int, y : int, name : str):
