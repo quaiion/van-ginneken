@@ -91,5 +91,4 @@ def GetWireResistance():
 def GetWireRat():
     pass
 
-
-ParseConfig("./tech1.json")
+ParseConfig("tech1.json")
