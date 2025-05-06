@@ -57,17 +57,27 @@ class Tree:
         
                 
     def InsertNode(self, node : Node, ParentNodeId : int, ChildrenNodeId : int):
+        # Проверка на родственников
+        child = self.GetNodeById(ChildrenNodeId)
+        if child.GetParent().id != ParentNodeId:
+            raise Exception("Parent with id = ", ParentNodeId, " and child with id = ", ChildrenNodeId, " are not relatives")
+
         # Прикрепим ноду к родителю
         self.AddNode(ParentNodeId, node)
         
         # Передадим ребёнка новому родителю
-        child = self.GetNodeById(ChildrenNodeId)
         child.SetParent(node)
         node.AddChild(child)
 
         # Заберём ребёнка у старого родителя
         oldParent = self.GetNodeById(ParentNodeId)
         oldParent.RemoveChild(ChildrenNodeId)
+
+    def InsertNodeWithNoId(self, node, ParentNodeId : int, ChildrenNodeId : int):
+        nodeIds = [item.id for item in self.nodeList]
+        node.id = max(nodeIds) + 1
+
+        self.InsertNode(node, ParentNodeId, ChildrenNodeId)
 
     def GetNodeById(self, nodeId : int) -> Node:
         for item in self.nodeList:
@@ -112,10 +122,11 @@ node1 = Node(1, 0, 0, "test", NodeType.Empty)
 node2 = Node(2, 0, 0, "test", NodeType.Empty)
 node3 = Node(10, 0, 0, "test", NodeType.Empty)
 node4 = Node(4, 0, 0, "test", NodeType.Empty)
-node5 = Node(10, 0, 0, "test", NodeType.Empty)
+node5 = Node(16, 0, 0, "test", NodeType.Empty)
 tree.AddNode(0, node1)
 tree.AddNode(0, node2)
 tree.AddNode(1, node3)
 tree.AddNode(1, node4)
+tree.InsertNodeWithNoId(node5, 1, 10)
 
 tree.VisualizeTree()
