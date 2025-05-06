@@ -45,13 +45,3 @@ def GetFullPath(segments):
         path.append(path[0])
 
     return path
-
-# Пример использования
-segments = [
-    [1, 10],
-    [1, 8],
-    [4, 8]
-]
-
-result = GetFullPath(segments)
-print(result)

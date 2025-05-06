@@ -34,15 +34,3 @@ def RestoreKeyPoints(points):
     key_points.append(points[-1])
     
     return key_points
-
-# Пример использования
-points = [
-    [1, 10], [1, 10], [1, 10]
-]
-
-try:
-    result = RestoreKeyPoints(points)
-    print("Ключевые точки ломаной:")
-    print(result)
-except ValueError as e:
-    print(f"Ошибка: {e}")

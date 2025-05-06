@@ -122,19 +122,3 @@ class Tree:
 
 # TODO: insert buffer before node
 # TODO: insert null-wire before node
-
-# rootNode = Node(0, 0, 0, "test", NodeType.Empty)
-# tree = Tree(rootNode)
-
-# node1 = Node(1, 0, 0, "test", NodeType.Empty)
-# node2 = Node(2, 0, 0, "test", NodeType.Empty)
-# node3 = Node(10, 0, 0, "test", NodeType.Empty)
-# node4 = Node(4, 0, 0, "test", NodeType.Empty)
-# node5 = Node(16, 0, 0, "test", NodeType.Empty)
-# tree.AddNode(0, node1)
-# tree.AddNode(0, node2)
-# tree.AddNode(1, node3)
-# tree.AddNode(1, node4)
-# tree.InsertNodeWithNoId(node5, 1, 10)
-
-# tree.VisualizeTree()

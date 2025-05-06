@@ -58,7 +58,7 @@ def GetNodeById(id, result):
                 return Node.NodeSync(id, item['x'], item['y'], item['name'], item['capacitance'], item['rat'])
 
 def FindChildren(nodeId : int, tree : Tree, parseResult):
-    print('FindChildren, nodeId = ', nodeId)
+    # print('FindChildren, nodeId = ', nodeId)
     currNode = tree.GetNodeById(nodeId)
     children = []
     for item in parseResult['edges']:
@@ -81,10 +81,10 @@ def FindChildren(nodeId : int, tree : Tree, parseResult):
         FindChildren(item.id, tree, parseResult)
 
 # Пример использования
-def ParseInputData():
-    cfg.ParseConfig('tech1.json')
-    result = ParseNetworkFile('test01.json')
-    print(result['edges'])
+def ParseInputData(techFilePath : str, netFilePath : str):
+    cfg.ParseConfig(techFilePath)
+    result = ParseNetworkFile(netFilePath)
+    # print(result['edges'])
     tree = None
 
     # Ищем buf1x node
