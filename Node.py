@@ -1,23 +1,12 @@
 import Config as cfg
 
 class NodeType:
-    Empty   = 0
-    Wire    = 1
-    Sink    = 2
-    Steiner = 3 
-    Driver  = 4
-
-def ParseNodeType(type):
-    if type == NodeType.Empty:
-        return "Empty"
-    if type == NodeType.Wire:
-        return "Wire"
-    if type == NodeType.Sink:
-        return "Sink"
-    if type == NodeType.Steiner:
-        return "Steiner"
-    if type == NodeType.Driver:
-        return "Driver"
+    Empty   = "Empty"
+    Wire    = "Wire"
+    Sink    = "Sink"
+    Steiner = "Steiner"
+    Driver  = "Driver"
+    
 class Node:
     id : int
     x : int

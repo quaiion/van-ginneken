@@ -1,6 +1,5 @@
 from Node import Node
 from Node import NodeType
-from Node import ParseNodeType
 
 from graphviz import Digraph
 
@@ -106,13 +105,13 @@ class Tree:
         def add_nodes_edges(node : Node):
             if node:
                 if node.nodeType == NodeType.Driver:
-                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + ParseNodeType(node.nodeType) + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
+                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
                 if node.nodeType == NodeType.Sink:
-                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + ParseNodeType(node.nodeType) + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\ncapacitance = ' + str(node.capacitance) + '\nrot = ' + str(node.rat))
+                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\ncapacitance = ' + str(node.capacitance) + '\nrot = ' + str(node.rat))
                 if node.nodeType == NodeType.Wire:
                     dot.node(str(node.id), "NodeId = " + str(node.id) + '\n (x0, y0) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\n (x1, y1) = (' + str(node.xEnd) + ', ' + str(node.yEnd) + ')' + '\nIsNull = ' + str(node.IsNull()))
                 if node.nodeType == NodeType.Steiner:
-                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + ParseNodeType(node.nodeType) + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
+                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
                 for child in node.children:
                     dot.edge(str(node.id), str(child.id))
                     add_nodes_edges(child)
