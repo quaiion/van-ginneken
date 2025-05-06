@@ -1,5 +1,9 @@
 from Node import Node
+from Node import NodeDriver
+from Node import NodeWire
 from Node import NodeType
+
+import Config as cfg
 
 from graphviz import Digraph
 
@@ -119,5 +123,26 @@ class Tree:
         add_nodes_edges(self.root)
         dot.render("n_ary_tree", view=True)  # Сохраняет файл и открывает его
 
-# TODO: insert buffer before node
+    def InsertBufferBeforeNode(self, childNode : Node):
+        if childNode.parent == None:
+            raise Exception("Cannot insert buffer before a tree root")
+
+        childNodeId = childNode.id
+        parentNodeId = childNode.parent.id
+
+        node = NodeDriver(0, childNode.x, childNode.y, cfg.DriverArr[0]['name'])
+        self.InsertNodeWithNoId(node, parentNodeId, childNodeId)
+
+    def InsertNullWireBeforeNode(self, childNode : Node):
+        if childNode.parent == None:
+            raise Exception("Cannot insert null-wire before a tree root")
+
+        childNodeId = childNode.id
+        parentNodeId = childNode.parent.id
+
+        node = NodeWire(0, childNode.x, childNode.y, childNode.x, childNode.y)
+        self.InsertNodeWithNoId(node, parentNodeId, childNodeId)
+
+
+
 # TODO: insert null-wire before node

@@ -76,6 +76,15 @@ class NodeSync(Node):
 class NodeWire(Node):
     xEnd : int
     yEnd : int
+    
+    def __init__(self, id, x, y):
+        super().__init__(id, x, y, "w" + str(id), NodeType.Wire)
+        self.capacitance = cfg.GetWireCapacitance()
+        self.resistance  = cfg.GetWireResistance()
+        self.rat         = cfg.GetWireRat()
+        self.xEnd        = x
+        self.yEnd        = y
+
     def __init__(self, id, x, y, xEnd, yEnd):
         super().__init__(id, x, y, "w" + str(id), NodeType.Wire)
         self.capacitance = cfg.GetWireCapacitance()
