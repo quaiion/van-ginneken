@@ -1,13 +1,23 @@
-import numpy as np
-import config.Config as cfg
+import Config as cfg
 
 class NodeType:
     Empty   = 0
     Wire    = 1
-    Sync    = 2
+    Sink    = 2
     Steiner = 3 
     Driver  = 4
 
+def ParseNodeType(type):
+    if type == NodeType.Empty:
+        return "Empty"
+    if type == NodeType.Wire:
+        return "Wire"
+    if type == NodeType.Sink:
+        return "Sink"
+    if type == NodeType.Steiner:
+        return "Steiner"
+    if type == NodeType.Driver:
+        return "Driver"
 class Node:
     id : int
     x : int
@@ -24,10 +34,10 @@ class Node:
     children : list
 
     def __init__(self, id : int, x : int, y : int, name: str, type : NodeType):
-        self.id = id
-        self.x = x
-        self.y = y
-        self.name = name
+        self.id = int(id)
+        self.x = int(x)
+        self.y = int(y)
+        self.name = str(name)
         self.nodeType = type
         self.parent = None
         self.children = []
@@ -60,9 +70,9 @@ class Node:
 class NodeDriver(Node):
     def __init__(self, id : int, x : int, y : int, name : str):
         super().__init__(id, x, y, name, NodeType.Driver)
-        super().capacitance = cfg.GetDriverCapacitance(name)
-        super().resistance  = cfg.GetDriverResistance(name)
-        super().rat         = cfg.GetDriverDelay(name)
+        self.capacitance = cfg.GetDriverCapacitance(name)
+        self.resistance  = cfg.GetDriverResistance(name)
+        self.rat         = cfg.GetDriverDelay(name)
 
 class NodeSteiner(Node):
     def __init__(self, id : int, x : int, y : int, name : str):
@@ -70,13 +80,20 @@ class NodeSteiner(Node):
 
 class NodeSync(Node):
     def __init__(self, id : int, x : int, y : int, name : str, capacitance : float, rat : float):
-        super().__init__(id, x, y, name, NodeType.Sync)
+        super().__init__(id, x, y, name, NodeType.Sink)
         self.capacitance = capacitance
         self.rat = rat
 
 class NodeWire(Node):
-    def __init__(self, id, x, y):
+    xEnd : int
+    yEnd : int
+    def __init__(self, id, x, y, xEnd, yEnd):
         super().__init__(id, x, y, "w" + str(id), NodeType.Wire)
-        super().capacitance = cfg.GetWireCapacitance()
-        super().resistance  = cfg.GetWireResistance()
-        super().rat         = cfg.GetWireRat()
+        self.capacitance = cfg.GetWireCapacitance()
+        self.resistance  = cfg.GetWireResistance()
+        self.rat         = cfg.GetWireRat()
+        self.xEnd        = xEnd
+        self.yEnd        = yEnd
+
+    def IsNull(self):
+        return (self.x == self.xEnd) and (self.y == self.yEnd)

@@ -1,5 +1,6 @@
 from Node import Node
 from Node import NodeType
+from Node import ParseNodeType
 
 from graphviz import Digraph
 
@@ -55,7 +56,6 @@ class Tree:
 
         self.EjectNode(id)
         
-                
     def InsertNode(self, node : Node, ParentNodeId : int, ChildrenNodeId : int):
         # Проверка на родственников
         child = self.GetNodeById(ChildrenNodeId)
@@ -100,13 +100,19 @@ class Tree:
         self.printNode(self.root)
     
     def VisualizeTree(self):
-        dot = Digraph(comment="N-ary Tree", format="svg")  # Можно выбрать формат: pdf, svg, png и т.д.
+        dot = Digraph(comment="N-ary Tree", format="pdf")  # Можно выбрать формат: pdf, svg, png и т.д.
 
         # Рекурсивное добавление узлов и связей
         def add_nodes_edges(node : Node):
             if node:
-                # Уникальный идентификатор узла (например, id(node))
-                dot.node(str(node.id))
+                if node.nodeType == NodeType.Driver:
+                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + ParseNodeType(node.nodeType) + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
+                if node.nodeType == NodeType.Sink:
+                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + ParseNodeType(node.nodeType) + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\ncapacitance = ' + str(node.capacitance) + '\nrot = ' + str(node.rat))
+                if node.nodeType == NodeType.Wire:
+                    dot.node(str(node.id), "NodeId = " + str(node.id) + '\n (x0, y0) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\n (x1, y1) = (' + str(node.xEnd) + ', ' + str(node.yEnd) + ')' + '\nIsNull = ' + str(node.IsNull()))
+                if node.nodeType == NodeType.Steiner:
+                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + ParseNodeType(node.nodeType) + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
                 for child in node.children:
                     dot.edge(str(node.id), str(child.id))
                     add_nodes_edges(child)
@@ -114,19 +120,21 @@ class Tree:
         add_nodes_edges(self.root)
         dot.render("n_ary_tree", view=True)  # Сохраняет файл и открывает его
 
+# TODO: insert buffer before node
+# TODO: insert null-wire before node
 
-rootNode = Node(0, 0, 0, "test", NodeType.Empty)
-tree = Tree(rootNode)
+# rootNode = Node(0, 0, 0, "test", NodeType.Empty)
+# tree = Tree(rootNode)
 
-node1 = Node(1, 0, 0, "test", NodeType.Empty)
-node2 = Node(2, 0, 0, "test", NodeType.Empty)
-node3 = Node(10, 0, 0, "test", NodeType.Empty)
-node4 = Node(4, 0, 0, "test", NodeType.Empty)
-node5 = Node(16, 0, 0, "test", NodeType.Empty)
-tree.AddNode(0, node1)
-tree.AddNode(0, node2)
-tree.AddNode(1, node3)
-tree.AddNode(1, node4)
-tree.InsertNodeWithNoId(node5, 1, 10)
+# node1 = Node(1, 0, 0, "test", NodeType.Empty)
+# node2 = Node(2, 0, 0, "test", NodeType.Empty)
+# node3 = Node(10, 0, 0, "test", NodeType.Empty)
+# node4 = Node(4, 0, 0, "test", NodeType.Empty)
+# node5 = Node(16, 0, 0, "test", NodeType.Empty)
+# tree.AddNode(0, node1)
+# tree.AddNode(0, node2)
+# tree.AddNode(1, node3)
+# tree.AddNode(1, node4)
+# tree.InsertNodeWithNoId(node5, 1, 10)
 
-tree.VisualizeTree()
+# tree.VisualizeTree()
