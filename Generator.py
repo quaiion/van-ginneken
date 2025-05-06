@@ -81,7 +81,7 @@ def GetEdgeDataFromTree(tree : Tree.Tree):
         id += 1
     return edges
 
-def GenerateCustomJson(output_file, tree : Tree.Tree):
+def GenerateOutputJson(output_file, tree : Tree.Tree):
     # Создаем структуру данных
     nodeData = GetNodeDataFromTree(tree)
 
