@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from time import time
+import argparse
 import Parser
 import Generator
 import algo
@@ -10,8 +11,8 @@ STEP    = 1
 
 wire_lens = range(LBOUND, UBUOUND, STEP)
 
-def run_dump_van_gin(src_file: str, dest_file: str) -> tuple:
-        tree = Parser.ParseInputData(techFilePath='tech1.json', netFilePath=src_file)
+def run_dump_van_gin(src_file: str, tech_file: str) -> tuple:
+        tree = Parser.ParseInputData(techFilePath=tech_file, netFilePath=src_file)
 
         timestamp_1 = time()
 
@@ -21,7 +22,7 @@ def run_dump_van_gin(src_file: str, dest_file: str) -> tuple:
 
         timestamp_2 = time()
 
-        Generator.GenerateOutputJson(dest_file, tree)
+        Generator.GenerateOutputJson(src_file[:-5] + '_out.json', tree)
 
         return best_scen['rat'], timestamp_2 - timestamp_1
 
@@ -38,10 +39,14 @@ for wire_len in wire_lens:
                    '}\n')
         file.close()
 
+argparser = argparse.ArgumentParser()
+argparser.add_argument('tech')
+args = argparser.parse_args()
+
 times, rats = [], []
 
 for wire_len in wire_lens:
-        rat, durat = run_dump_van_gin('artifacts/' + str(wire_len) + '.json', 'artifacts/' + str(wire_len) + '_out.json')
+        rat, durat = run_dump_van_gin('artifacts/' + str(wire_len) + '.json', args.tech)
         times.append(durat * 1000)
         rats.append(10000.0 - rat)
 
