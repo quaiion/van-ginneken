@@ -18,6 +18,49 @@ def update_tree(node: Node.Node, tree: Tree.Tree, best_buf_scen: list) -> None:
                 
                 best_buf_scen.pop(0)
 
+def plain_tree_char(node: Node.Node) -> dict:
+        links = node.GetChildren()
+
+        if node.GetType() == Node.NodeType.Sink:
+                assert len(links) == 0
+
+                scouted = {
+                        'cap': node.GetCapacitance(),
+                        'rat': node.GetRat(),
+                }
+
+        elif node.GetType() == Node.NodeType.Wire:
+                assert len(links) == 1
+
+                scouted = plain_tree_char(links[0])
+                wire_len = 0 if node.IsNull() else 1
+
+                scouted['rat'] = endwire_rat(scouted['cap'], wire_len,
+                                             scouted['rat'])
+                scouted['cap'] = endwire_cap(scouted['cap'], wire_len)
+
+        elif node.GetType() == Node.NodeType.Steiner:
+                assert len(links) > 1
+
+                scouted = None
+                for link in links:
+                        if scouted:
+                                new_scouted = plain_tree_char(link)
+                                scouted['rat'] = min(scouted['rat'], new_scouted['rat'])
+                                scouted['cap'] = scouted['cap'] + new_scouted['cap']
+                        else:
+                                scouted = plain_tree_char(link)
+
+        else: # Driver
+                assert len(links) == 1
+
+                scouted = plain_tree_char(links[0])
+
+                scouted['rat'] = endbuf_rat(scouted['cap'], scouted['rat'])
+                scouted['cap'] = Config.GetDriverCapacitance('buf1x')
+        
+        return scouted
+
 def choose_best_scen(scouted: list) -> dict:
         max_rat = -float('inf')
         best_scen = None
@@ -51,7 +94,7 @@ def scout_tree(node: Node.Node) -> list:
         elif node.GetType() == Node.NodeType.Steiner:
                 assert len(links) > 1
 
-                scouted = []
+                scouted = None
                 for link in links:
                         if scouted:
                                 scouted = merge_scouted(scouted, scout_tree(link))
@@ -68,9 +111,10 @@ def scout_tree(node: Node.Node) -> list:
 
 def add_wire(scouted: list, wire_len: int) -> None:
         for scenario in scouted:
-                scenario['cap'] = endwire_cap(scenario['cap'], wire_len)
+                # assignment order is important
                 scenario['rat'] = endwire_rat(scenario['cap'], wire_len,
                                               scenario['rat'])
+                scenario['cap'] = endwire_cap(scenario['cap'], wire_len)
 
 def add_candidate(scouted: list) -> None:
         for i in range(len(scouted)):
@@ -85,8 +129,9 @@ def add_candidate(scouted: list) -> None:
 
 def add_driver(scouted: list) -> None:
         for scenario in scouted:
-                scenario['cap'] = Config.GetDriverCapacitance('buf1x')
+                # assignment order is important
                 scenario['rat'] = endbuf_rat(scenario['cap'], scenario['rat'])
+                scenario['cap'] = Config.GetDriverCapacitance('buf1x')
 
 def endwire_cap(load_cap: float, wire_len: int) -> float:
         assert wire_len in (0, 1)
