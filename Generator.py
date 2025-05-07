@@ -96,7 +96,5 @@ def GenerateOutputJson(output_file, tree : Tree.Tree):
     with open(output_file, 'w') as f:
         json.dump(data, f, indent=2)
 
-    print(f"Файл {output_file} успешно создан!")
-
 # Использование
 # generate_custom_json("network_config.json")

@@ -5,7 +5,7 @@ from Node import NodeType
 
 import Config as cfg
 
-from graphviz import Digraph
+import pydot
 
 class Tree:
     root : Node
@@ -102,26 +102,26 @@ class Tree:
     def PrintTree(self):
         self.printNode(self.root)
     
-    def VisualizeTree(self):
-        dot = Digraph(comment="N-ary Tree", format="pdf")  # Можно выбрать формат: pdf, svg, png и т.д.
+    def VisualizeTree(self, filename: str):
+        dot = pydot.Dot("N-ary Tree", graph_type="digraph")
 
         # Рекурсивное добавление узлов и связей
         def add_nodes_edges(node : Node):
             if node:
                 if node.nodeType == NodeType.Driver:
-                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
+                    dot.add_node(pydot.Node(str(node.id), label=("NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')))
                 if node.nodeType == NodeType.Sink:
-                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\ncapacitance = ' + str(node.capacitance) + '\nrot = ' + str(node.rat))
+                    dot.add_node(pydot.Node(str(node.id), label=("NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\ncapacitance = ' + str(node.capacitance) + '\nrat = ' + str(node.rat))))
                 if node.nodeType == NodeType.Wire:
-                    dot.node(str(node.id), "NodeId = " + str(node.id) + '\n (x0, y0) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\n (x1, y1) = (' + str(node.xEnd) + ', ' + str(node.yEnd) + ')' + '\nIsNull = ' + str(node.IsNull()))
+                    dot.add_node(pydot.Node(str(node.id), label=("NodeId = " + str(node.id) + '\n (x0, y0) = (' + str(node.x) + ', ' + str(node.y) + ')' + '\n (x1, y1) = (' + str(node.xEnd) + ', ' + str(node.yEnd) + ')' + '\nIsNull = ' + str(node.IsNull()))))
                 if node.nodeType == NodeType.Steiner:
-                    dot.node(str(node.id), "NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')
+                    dot.add_node(pydot.Node(str(node.id), label=("NodeId = " + str(node.id) + "\ntype: " + node.nodeType + '\n (x, y) = (' + str(node.x) + ', ' + str(node.y) + ')')))
                 for child in node.children:
-                    dot.edge(str(node.id), str(child.id))
+                    dot.add_edge(pydot.Edge(str(node.id), str(child.id)))
                     add_nodes_edges(child)
 
         add_nodes_edges(self.root)
-        dot.render("n_ary_tree", view=True)  # Сохраняет файл и открывает его
+        dot.write_png(filename)
 
     def InsertBufferBeforeNode(self, childNode : Node):
         if childNode.parent == None:
